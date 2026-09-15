@@ -83,16 +83,26 @@ HITL when required
 Fixed evaluation output + audit trail
 ```
 
-The detailed version is in [`architecture.md`](architecture.md), along with the proposed agent responsibilities, memory design, synchronous/asynchronous parts, and observability approach.
+A visual version is available in [`nlp-midterm/system_architecture.svg`](nlp-midterm/system_architecture.svg). The detailed design is in [`nlp-midterm/architecture.md`](nlp-midterm/architecture.md).
 
-## Repository files
+## Repository structure
+
+```text
+Prepathon-2026/
+├── README.md
+└── nlp-midterm/
+    ├── research.md
+    ├── architecture.md
+    ├── midterm_report.md
+    └── system_architecture.svg
+```
 
 | File | Purpose |
 |---|---|
-| [`research.md`](research.md) | Research trail, dataset observations, scenario analysis, and design findings |
-| [`architecture.md`](architecture.md) | Preliminary system architecture and component responsibilities |
-| [`midterm_report.md`](midterm_report.md) | Short mid-term summary of findings and intended implementation direction |
-| [`system_architecture.png`](system_architecture.png) | Visual overview of the proposed architecture |
+| [`research.md`](nlp-midterm/research.md) | Research trail, dataset observations, scenario analysis, and design findings |
+| [`architecture.md`](nlp-midterm/architecture.md) | Preliminary system architecture and component responsibilities |
+| [`midterm_report.md`](nlp-midterm/midterm_report.md) | Short mid-term summary of findings and intended implementation direction |
+| [`system_architecture.svg`](nlp-midterm/system_architecture.svg) | Visual overview of the proposed architecture |
 
 ## What I plan to do next
 
