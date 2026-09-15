@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+<rect width="1200" height="1500" fill="white"/>
+<style>text{font-family:Arial,sans-serif;fill:#1f2937}.title{font-size:34px;font-weight:700}.box{fill:#f8fafc;stroke:#334155;stroke-width:2}.section{font-size:23px;font-weight:700}.small{font-size:17px}.arrow{stroke:#475569;stroke-width:3;marker-end:url(#arrow)}</style>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#475569"/></marker></defs>
+<text x="600" y="55" text-anchor="middle" class="title">Agentic Customer 360 — Preliminary Architecture</text>
+<text x="600" y="85" text-anchor="middle" class="small">Mid-term design direction</text>
+<rect x="360" y="120" width="480" height="80" rx="14" class="box"/><text x="600" y="153" text-anchor="middle" class="section">History + Live Event Streams</text><text x="600" y="180" text-anchor="middle" class="small">multiple asynchronous customer sources</text>
+<line x1="600" y1="200" x2="600" y2="250" class="arrow"/>
+<rect x="310" y="250" width="580" height="105" rx="14" class="box"/><text x="600" y="285" text-anchor="middle" class="section">Event-Time Ingestion</text><text x="600" y="313" text-anchor="middle" class="small">ordering • deduplication • late-event reconciliation</text><text x="600" y="337" text-anchor="middle" class="small">historical baseline before live processing</text>
+<line x1="600" y1="355" x2="600" y2="405" class="arrow"/>
+<rect x="60" y="405" width="250" height="110" rx="14" class="box"/><text x="185" y="440" text-anchor="middle" class="section">Transaction</text><text x="185" y="470" text-anchor="middle" class="small">billing / cash flow</text><text x="185" y="494" text-anchor="middle" class="small">signals</text>
+<rect x="335" y="405" width="250" height="110" rx="14" class="box"/><text x="460" y="440" text-anchor="middle" class="section">Usage</text><text x="460" y="470" text-anchor="middle" class="small">engagement / web</text><text x="460" y="494" text-anchor="middle" class="small">signals</text>
+<rect x="610" y="405" width="250" height="110" rx="14" class="box"/><text x="735" y="440" text-anchor="middle" class="section">Support</text><text x="735" y="470" text-anchor="middle" class="small">sentiment / intent</text><text x="735" y="494" text-anchor="middle" class="small">signals</text>
+<rect x="885" y="405" width="250" height="110" rx="14" class="box"/><text x="1010" y="440" text-anchor="middle" class="section">KYC / Profile</text><text x="1010" y="470" text-anchor="middle" class="small">customer changes</text><text x="1010" y="494" text-anchor="middle" class="small">signals</text>
+<line x1="185" y1="515" x2="600" y2="570" class="arrow"/><line x1="460" y1="515" x2="600" y2="570" class="arrow"/><line x1="735" y1="515" x2="600" y2="570" class="arrow"/><line x1="1010" y1="515" x2="600" y2="570" class="arrow"/>
+<rect x="310" y="570" width="580" height="115" rx="14" class="box"/><text x="600" y="608" text-anchor="middle" class="section">Customer State Board</text><text x="600" y="638" text-anchor="middle" class="small">structured findings • baselines • hypotheses</text><text x="600" y="662" text-anchor="middle" class="small">customer-scoped evidence IDs + trace IDs</text>
+<rect x="920" y="560" width="220" height="135" rx="14" class="box"/><text x="1030" y="595" text-anchor="middle" class="section">Memory</text><text x="1030" y="625" text-anchor="middle" class="small">working</text><text x="1030" y="649" text-anchor="middle" class="small">episodic</text><text x="1030" y="673" text-anchor="middle" class="small">semantic / policy</text><line x1="920" y1="625" x2="890" y2="625" class="arrow"/>
+<line x1="600" y1="685" x2="600" y2="735" class="arrow"/>
+<rect x="310" y="735" width="580" height="120" rx="14" class="box"/><text x="600" y="775" text-anchor="middle" class="section">Synthesis / Life-Event Inference</text><text x="600" y="805" text-anchor="middle" class="small">cross-source correlation • competing hypotheses</text><text x="600" y="829" text-anchor="middle" class="small">confidence updates + contradiction handling</text>
+<line x1="600" y1="855" x2="600" y2="905" class="arrow"/>
+<rect x="310" y="905" width="580" height="100" rx="14" class="box"/><text x="600" y="943" text-anchor="middle" class="section">Action / Eligibility</text><text x="600" y="973" text-anchor="middle" class="small">bounded action enum • policy checks</text>
+<line x1="600" y1="1005" x2="600" y2="1055" class="arrow"/>
+<rect x="310" y="1055" width="580" height="100" rx="14" class="box"/><text x="600" y="1093" text-anchor="middle" class="section">Guardrail / Critic</text><text x="600" y="1123" text-anchor="middle" class="small">validation • disagreement • sensitive-action checks</text>
+<line x1="600" y1="1155" x2="600" y2="1205" class="arrow"/>
+<rect x="120" y="1205" width="360" height="105" rx="14" class="box"/><text x="300" y="1245" text-anchor="middle" class="section">HITL Checkpoint</text><text x="300" y="1275" text-anchor="middle" class="small">approve • reject • modify</text>
+<rect x="720" y="1205" width="360" height="105" rx="14" class="box"/><text x="900" y="1245" text-anchor="middle" class="section">Auto-approved Path</text><text x="900" y="1275" text-anchor="middle" class="small">only when policy permits</text>
+<line x1="520" y1="1155" x2="300" y2="1205" class="arrow"/><line x1="680" y1="1155" x2="900" y2="1205" class="arrow"/>
+<line x1="300" y1="1310" x2="600" y2="1360" class="arrow"/><line x1="900" y1="1310" x2="600" y2="1360" class="arrow"/>
+<rect x="300" y="1360" width="600" height="90" rx="14" class="box"/><text x="600" y="1397" text-anchor="middle" class="section">Fixed Evaluation Output + Audit Trace</text><text x="600" y="1427" text-anchor="middle" class="small">state • action • HITL status • confidence + evidence path</text>
+</svg>
