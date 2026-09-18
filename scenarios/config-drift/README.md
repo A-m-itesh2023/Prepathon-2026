@@ -1,0 +1,1 @@
+# Configuration drift scenario\n\nChange an application configuration value to an invalid value and observe degradation. Ground truth: configuration change.\n
