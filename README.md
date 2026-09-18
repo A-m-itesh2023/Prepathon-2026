@@ -1,129 +1,105 @@
-# Agentic Customer 360 — Mid-Term Submission
+# Kubernetes RCA Agent — Inter-IIT Tech Meet 15.0 Prepathon 2026
 
-**Problem Statement:** Agentic Customer 360 — Proactive Intervention Desk  
-**Participant:** Amitesh Mitra  
-**Roll No.:** 26055002  
-**Branch:** Industrial Chemistry  
-**Submission:** Mid-Term
+**Amitesh Mitra · Roll No. 26055002 · Industrial Chemistry · IIT (BHU) Varanasi**
 
-## What this repository contains
+A sandboxed, evidence-driven agent for investigating Kubernetes incidents and producing a defensible root-cause analysis (RCA).
 
-This repository is a snapshot of my progress on the NLP problem statement up to the mid-term submission. The main focus so far has been understanding the event-stream data properly, studying the problem requirements, and turning those findings into a practical system architecture.
+## What this implements
 
-I have intentionally kept this as a **mid-term snapshot rather than presenting it as a finished system**. The architecture is still open to changes as implementation starts and more experiments are done.
+The system is an investigation loop rather than an `LLM + kubectl` wrapper:
 
-## Work completed so far
-
-### 1. Understood the data and event stream
-
-I went through the supplied schema and the history/live streams and looked at how different customer signals appear across sources such as:
-
-- card payments and refunds
-- banking/ledger events
-- web and app activity
-- support interactions
-- KYC/customer-profile changes
-- transfers and recurring payments
-
-A key observation was that the system cannot simply look at one event at a time. Event time matters, events can arrive late/out of order, and useful signals often appear only after combining multiple sources.
-
-### 2. Studied the three scenarios
-
-I traced the supplied scenarios to understand what kinds of evidence the final system will need to combine.
-
-Some examples include:
-
-- medical-related transactions + reduced income + a hardship search/support request
-- baby-related purchases + daycare activity + a later KYC dependent change
-- support friction + reduced engagement + account activity that can indicate churn risk
-
-I also noted the importance of **red herrings and contradictory signals**, since a single unusual transaction should not automatically become a life-event prediction.
-
-### 3. Explored the multi-agent approach
-
-The current direction is a hybrid multi-agent architecture rather than one large agent trying to interpret everything.
-
-The preliminary design separates source-specific analysis from cross-source reasoning. Specialist agents produce structured signals, which are then combined by a synthesis/life-event layer before an action decision is made.
-
-### 4. Thought through memory and traceability
-
-I am treating memory as more than just a vector database. The current design separates:
-
-- raw event history
-- short-term working context
-- episodic customer history
-- semantic/policy knowledge
-- a current customer state board
-
-The goal is to make it possible to answer not only **"what did the system decide?"** but also **"what evidence caused the decision?"**.
-
-### 5. Looked at event-time processing and agent coordination
-
-I reviewed material around event-time/watermark based stream processing and multi-agent handoff/coordination patterns. These readings helped shape the current ideas around late events, scoped agent handoffs, parallel specialist analysis, synthesis, and traceability.
-
-## Current architecture direction
-
-```text
-Incoming event stream
-        ↓
-Event-time ingestion + ordering
-        ↓
-Source-specific specialist agents
-        ↓
-Customer State Board + memory
-        ↓
-Cross-source synthesis / life-event inference
-        ↓
-Confidence + action/eligibility decision
-        ↓
-Guardrail / critic
-        ↓
-HITL when required
-        ↓
-Fixed evaluation output + audit trail
+```
+Incident
+   ↓
+Initial observations
+   ↓
+Competing hypotheses
+   ↓
+Evidence planner
+   ↓
+Read-only tool gateway
+   ├── Kubernetes API / Events
+   ├── Container logs
+   └── Prometheus metrics
+   ↓
+Hypothesis update + causal timeline
+   ↓
+More evidence if uncertainty remains
+   ↓
+Structured RCA
 ```
 
-A visual version is available in [`nlp-midterm/system_architecture.svg`](nlp-midterm/system_architecture.svg). The detailed design is in [`nlp-midterm/architecture.md`](nlp-midterm/architecture.md).
+The tool gateway is read-only. Observability content is treated as **untrusted data**, not as instructions. The agent has no generic shell tool, no secret-reading tool, and no host access.
 
-## Repository structure
+## Observability sources configured
 
-```text
-Prepathon-2026/
-├── README.md
-└── nlp-midterm/
-    ├── research.md
-    ├── architecture.md
-    ├── midterm_report.md
-    └── system_architecture.svg
+- Kubernetes API resources
+- Kubernetes Events
+- Application/container logs
+- Prometheus metrics
+
+MCP adapters for Loki/Grafana/Elasticsearch/Tempo/Jaeger are extension points; they are not claimed as implemented sources unless enabled.
+
+## Incident scenarios
+
+1. **OOM / resource exhaustion**
+2. **Bad deployment**
+3. **Dependency failure** requiring multi-source correlation
+4. **Configuration drift**
+
+Each scenario has a declared ground-truth cause.
+
+## Quick start
+
+Install Docker, `kubectl`, `kind`, Python 3.11+, and Helm.
+
+```bash
+kind create cluster --name rca-lab
+kubectl cluster-info --context kind-rca-lab
+kubectl apply -f scenarios/base/
 ```
 
-| File | Purpose |
-|---|---|
-| [`research.md`](nlp-midterm/research.md) | Research trail, dataset observations, scenario analysis, and design findings |
-| [`architecture.md`](nlp-midterm/architecture.md) | Preliminary system architecture and component responsibilities |
-| [`midterm_report.md`](nlp-midterm/midterm_report.md) | Short mid-term summary of findings and intended implementation direction |
-| [`system_architecture.svg`](nlp-midterm/system_architecture.svg) | Visual overview of the proposed architecture |
+Run:
 
-## What I plan to do next
+```bash
+python -m rca_agent.cli --incident "checkout is returning a sudden increase in 5xx errors" --namespace rca-demo
+```
 
-The next step is to move from the architecture into a working prototype. The initial implementation will focus on getting the event stream and customer state handling correct before adding more sophisticated agent behaviour.
+Run security tests:
 
-Planned steps are:
+```bash
+python -m pytest tests -q
+```
 
-1. Build the event-time ingestion/replay layer.
-2. Create structured outputs for the specialist agents.
-3. Maintain and update the customer state board.
-4. Implement cross-source synthesis and confidence updates.
-5. Add action selection, guardrails and the HITL checkpoint.
-6. Add tracing/audit information so each final decision has a clear evidence path.
-7. Test the approach across the supplied scenarios, including late events and misleading signals.
+Run the scenario evaluator:
 
-## Mid-term status
+```bash
+python scripts/evaluate_scenarios.py --namespace rca-demo
+```
 
-**Self-assessed completion: 2/5**
+## RCA output contract
 
-This reflects that the research, dataset understanding and preliminary architecture are in place, while the end-to-end implementation is still to be built and tested.
+Each investigation returns observed facts, hypotheses, evidence, timeline, root-cause conclusion, confidence, alternative explanations and uncertainty.
 
----
+## Security
 
-*This repository is intended to document the work done so far for the mid-term checkpoint. The design may evolve as implementation and testing reveal better approaches.*
+The mandatory sandbox boundary is implemented at the tool layer:
+
+- only allow-listed read operations are exposed;
+- no generic shell/exec capability;
+- no Secret retrieval;
+- no host access;
+- observability data is treated as untrusted;
+- unknown operations are rejected.
+
+See [security/THREAT_MODEL.md](security/THREAT_MODEL.md).
+
+## Submission write-up
+
+See [writeup/technical_writeup.md](writeup/technical_writeup.md).
+
+## Status
+
+The repository contains the runnable prototype structure and reproducible scenario definitions. **No benchmark number is invented.** Scenario results should be generated by running the local environment.
+
+The repository also contains earlier Prepathon work under `nlp-midterm/`; the Development submission is the `rca_agent/`, `scenarios/`, `security/`, `scripts/` and `writeup/` portions.
