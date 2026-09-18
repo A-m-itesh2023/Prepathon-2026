@@ -1,1 +1,3 @@
-kubernetes>=32.0.0\npytest>=8.0.0\nprometheus-api-client>=0.5.7\n
+kubernetes>=32.0.0
+pytest>=8.0.0
+prometheus-api-client>=0.5.7
