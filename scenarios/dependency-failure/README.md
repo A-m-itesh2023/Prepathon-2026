@@ -1,0 +1,1 @@
+# Dependency failure scenario\n\nRun an API and a database dependency, then make the dependency unavailable. Ground truth: dependency outage. Expected investigation: Kubernetes state + API logs + dependency evidence.\n
