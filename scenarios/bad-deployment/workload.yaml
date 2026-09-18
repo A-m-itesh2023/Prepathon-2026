@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout-bad
+  namespace: rca-demo
+  labels: {app: checkout-bad}
+  annotations:
+    rca.prepathon/ground-truth: bad-deployment
+spec:
+  replicas: 2
+  selector: {matchLabels: {app: checkout-bad}}
+  template:
+    metadata: {labels: {app: checkout-bad}}
+    spec:
+      containers:
+      - name: app
+        image: nginx:does-not-exist-prepathon
+        ports: [{containerPort: 80}]
