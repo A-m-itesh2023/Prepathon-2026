@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: checkout-config
+  namespace: rca-demo
+data:
+  APP_MODE: invalid-mode
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-demo
+  namespace: rca-demo
+  labels: {app: config-demo}
+  annotations:
+    rca.prepathon/ground-truth: configuration-problem
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: config-demo}}
+  template:
+    metadata: {labels: {app: config-demo}}
+    spec:
+      containers:
+      - name: app
+        image: busybox:1.36
+        command: ["sh","-c"]
+        args: ["if [ \"$APP_MODE\" != \"production\" ]; then echo 'ERROR invalid configuration APP_MODE'; exit 1; fi; sleep 3600"]
+        env:
+        - name: APP_MODE
+          valueFrom:
+            configMapKeyRef: {name: checkout-config,key: APP_MODE}
