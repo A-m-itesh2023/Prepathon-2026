@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout
+  namespace: rca-demo
+  labels: {app: checkout}
+spec:
+  replicas: 2
+  selector: {matchLabels: {app: checkout}}
+  template:
+    metadata: {labels: {app: checkout}}
+    spec:
+      containers:
+      - name: app
+        image: nginx:1.27-alpine
+        ports: [{containerPort: 80}]
+        resources:
+          requests: {cpu: 50m, memory: 64Mi}
+          limits: {cpu: 200m, memory: 128Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: checkout
+  namespace: rca-demo
+spec:
+  selector: {app: checkout}
+  ports: [{port: 80, targetPort: 80}]
