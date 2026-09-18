@@ -1,13 +1,11 @@
 [build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
-
+requires=["setuptools>=68"]
+build-backend="setuptools.build_meta"
 [project]
-name = "kubernetes-rca-agent"
-version = "0.1.0"
-description = "Sandboxed evidence-driven Kubernetes incident RCA agent"
-requires-python = ">=3.11"
-dependencies = ["kubernetes>=32.0.0"]
-
+name="kubernetes-rca-agent"
+version="0.1.0"
+description="Sandboxed evidence-driven Kubernetes incident RCA agent"
+requires-python=">=3.11"
+dependencies=["kubernetes>=32.0.0"]
 [tool.pytest.ini_options]
-pythonpath = ["."]
+pythonpath=["."]
