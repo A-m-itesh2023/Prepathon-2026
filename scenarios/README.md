@@ -1,3 +1,10 @@
-# Incident Scenarios
+# Reproducible incidents
 
-Scenarios are designed around known ground truth: OOM/resource exhaustion, bad deployment, dependency failure, and configuration degradation. Each scenario is intended to be reproducible locally and evaluated through the agent's evidence trail and final RCA.
+Each directory contains a workload with a documented ground-truth failure mode. Apply the base namespace first, then apply an individual scenario:
+
+```bash
+kubectl apply -f scenarios/base/
+kubectl apply -f scenarios/oom/workload.yaml
+```
+
+Use the same pattern for `bad-deployment`, `dependency-failure`, and `config-drift`. The scenarios are deliberately small so the causal chain can be inspected with Kubernetes resources, Events and logs.
