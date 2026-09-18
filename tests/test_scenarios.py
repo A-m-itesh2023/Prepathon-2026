@@ -13,23 +13,23 @@ class MockGateway:
         self.namespace = "prepathon"
         self.observations = observations
 
-    def _result(self, source, query):
-        return Result(source, query, self.observations.get(query, "no evidence"))
-
     def pods(self):
-        return self._result("kubernetes", "list pods")
+        pod = next(k for k in self.observations if k == "list pods")
+        name = next((k.split(" ", 1)[1] for k in self.observations if k.startswith("logs ")), "app")
+        return Result("kubernetes", pod, [{"name": name, "observation": self.observations[pod]}])
 
     def events(self):
-        return self._result("events", "list events")
+        return Result("events", "list events", self.observations["list events"])
 
     def deployments(self):
-        return self._result("kubernetes", "list deployments")
+        return Result("kubernetes", "list deployments", self.observations["list deployments"])
 
     def logs(self, pod, container=None, tail_lines=200):
-        return self._result("logs", f"logs {pod}")
+        key = f"logs {pod}"
+        return Result("logs", key, self.observations[key])
 
     def metrics(self, prometheus_url, query):
-        return self._result("prometheus", query)
+        return Result("prometheus", query, "No anomalous metric required for this ground-truth case.")
 
 def run_case(name, observations, expected):
     result = RCAAgent(MockGateway(observations)).investigate(name)
